@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<title>Serch Result</title>
+<form action="/serch/" method="post">
+    {% csrf_token %}
+    {% if serch == 'all' %}
+    <fieldset style="border: none; padding: 0; margin: 0; text-align: center; padding-top: 3vh;">
+        <input id="item-1" class="radio-inline__input" type="radio" name="select_range" value="all" checked="checked"/>
+        <label class="radio-inline__label" for="item-1">
+            All
+        </label>
+        <input id="item-2" class="radio-inline__input" type="radio" name="select_range" value="mercari"/>
+        <label class="radio-inline__label" for="item-2">
+            Mercari
+        </label>
+        <input id="item-3" class="radio-inline__input" type="radio" name="select_range" value="yahoo"/>
+        <label class="radio-inline__label" for="item-3">
+            Yahoo Auction
+        </label>
+    </fieldset>
+    {% elif serch == 'mercari' %}
+    <fieldset style="border: none; padding: 0; margin: 0; text-align: center; padding-top: 3vh;">
+        <input id="item-1" class="radio-inline__input" type="radio" name="select_range" value="all"/>
+        <label class="radio-inline__label" for="item-1">
+            All
+        </label>
+        <input id="item-2" class="radio-inline__input" type="radio" name="select_range" value="mercari" checked="checked"/>
+        <label class="radio-inline__label" for="item-2">
+            Mercari
+        </label>
+        <input id="item-3" class="radio-inline__input" type="radio" name="select_range" value="yahoo"/>
+        <label class="radio-inline__label" for="item-3">
+            Yahoo Auction
+        </label>
+    </fieldset>
+    {% elif serch == 'yahoo' %}
+    <fieldset style="border: none; padding: 0; margin: 0; text-align: center; padding-top: 3vh;">
+        <input id="item-1" class="radio-inline__input" type="radio" name="select_range" value="all"/>
+        <label class="radio-inline__label" for="item-1">
+            All
+        </label>
+        <input id="item-2" class="radio-inline__input" type="radio" name="select_range" value="mercari"/>
+        <label class="radio-inline__label" for="item-2">
+            Mercari
+        </label>
+        <input id="item-3" class="radio-inline__input" type="radio" name="select_range" value="yahoo" checked="checked"/>
+        <label class="radio-inline__label" for="item-3">
+            Yahoo Auction
+        </label>
+    </fieldset>
+    {% endif %}
+    <div class="word_input" style="display: flex; width: 50%; margin: auto; padding-top: 3vh;">
+        <input name="serch_word" type="text" class="form-control" value='{{ word }}'>
+        <button type="submit" class="btn btn-primary">Serch</button>
+    </div>
+</form>
+<p style="text-align: center; padding-top: 1vh;">{{ item_num }}件を表示</p>
+<div class="table-responsive">
+    <table id="fav-table" class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Picture</th>
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Time</th>
+          <th scope="col">Origin</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for res in result %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>
+                <img src="{{ res.item_pic }}" style="width: 10vw;">
+            </td>
+            <td>
+                <a href="{{ res.item_link }}" target="_blank">
+                    {{ res.item_name }}
+                </a>
+            </td>
+            <td>
+                {{ res.item_price }}
+            </td>
+            <td>
+                {{ res.item_time }}
+            </td>
+            <td>
+                {{ res.item_origin }}
+            </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#fav-table').tablesorter();
+    });
+</script>
+
+<style>
+    .radio-inline__input {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+    }
+
+    .radio-inline__label {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin-right: 18px;
+        border-radius: 3px;
+        transition: all .2s;
+    }
+
+    .radio-inline__input:checked + .radio-inline__label {
+        background: #2c6ce4;
+        color: #fff;
+        text-shadow: 0 0 1px rgba(0,0,0,.7);
+    }
+
+    .radio-inline__input:focus + .radio-inline__label {
+        outline-color: #4D90FE;
+        outline-offset: -2px;
+        outline-style: auto;
+        outline-width: 5px;
+    }
+</style>
+
+{% endblock %}
